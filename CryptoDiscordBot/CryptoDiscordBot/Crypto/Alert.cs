@@ -9,7 +9,7 @@ namespace CryptoDiscordBot.Crypto
         public string Ticker { get; set; }
         public string Exchange { get; set; }
         public double Price { get; set; }
-        public Comparison Direction { get; set; }
+        public Comparison Comparison { get; set; }
         public bool Triggered { get; set; }
 
         public Alert(string ticker, string exchange, double price, Comparison direction)

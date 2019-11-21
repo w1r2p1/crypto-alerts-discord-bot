@@ -14,20 +14,30 @@ namespace CryptoDiscordBot.Crypto
 
         public async Task<double> getPrice(string ticker)
         {
-            throw new NotImplementedException();
+            // Check valid ticker?
+
+            var price = await getTicker(ticker);
+            return price;
         }
 
-        public async Task<double> getTicker(string ticker)
+        private async Task<double> getTicker(string ticker)
         {
-            // DeserializeObject throws an exception when wrong ticker due to null Result value, need to fix
             string urlExtension = String.Format("public/getticker?market={0}", ticker);
             string url = String.Concat(apiEndpoint, urlExtension);
 
             string response = await GetAsync(url);
 
-            var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
+            try
+            {
+                var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
+                return _response.result.Last;
 
-            return _response.result.Last;
+            }
+            catch (AggregateException exc)
+            {
+                throw new TickerNotFoundException();
+            }
+
         }
 
         private async Task<string> GetAsync(string uri)
@@ -52,6 +62,7 @@ namespace CryptoDiscordBot.Crypto
             public double Bid { get; set; }
             public double Ask { get; set; }
             public double Last { get; set; }
+
         }
 
         public class RootObject
