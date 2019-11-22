@@ -2,6 +2,13 @@
 using CryptoDiscordBot.Crypto;
 using System.Threading.Tasks;
 using System.Threading;
+using Discord;
+using Discord.API;
+using Discord.Net;
+using Discord.Rest;
+using Discord.Webhook;
+using Discord.Commands;
+using Discord.WebSocket;
 
 namespace CryptoDiscordBot
 {
@@ -9,14 +16,14 @@ namespace CryptoDiscordBot
     {
         static void Main(string[] args)
         {
-            MainAsync(args).GetAwaiter().GetResult();
+            new Program().MainAsync(args).GetAwaiter().GetResult();
         }
 
-        static async Task MainAsync(string[] args)
+        public async Task MainAsync(string[] args)
         {
-            Bittrex x = new Bittrex();
-            double y = await x.getPrice("BTC-LTc");
-            Console.WriteLine(y);
+            
         }
+
+        
     }
 }

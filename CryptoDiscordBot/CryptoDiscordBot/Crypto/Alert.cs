@@ -12,12 +12,12 @@ namespace CryptoDiscordBot.Crypto
         public Comparison Comparison { get; set; }
         public bool Triggered { get; set; }
 
-        public Alert(string ticker, string exchange, double price, Comparison direction)
+        public Alert(string ticker, string exchange, double price, Comparison comparison)
         {
             Ticker = ticker;
             Exchange = exchange;
             Price = price;
-            Direction = direction;
+            Comparison = comparison;
             Triggered = false;
         }
 
