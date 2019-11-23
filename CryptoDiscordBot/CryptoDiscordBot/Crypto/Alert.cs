@@ -11,14 +11,33 @@ namespace CryptoDiscordBot.Crypto
         public double Price { get; set; }
         public Comparison Comparison { get; set; }
         public bool Triggered { get; set; }
+        public int Id { get; set; }
 
-        public Alert(string ticker, string exchange, double price, Comparison comparison)
+        public Alert(string ticker, string exchange, double price, Comparison comparison, int id)
         {
             Ticker = ticker;
             Exchange = exchange;
             Price = price;
             Comparison = comparison;
             Triggered = false;
+            Id = id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as Alert;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return item.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
         }
 
     }
