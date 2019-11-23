@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CryptoDiscordBot.Crypto
 {
-    static class AlertManager
+    class AlertManager
     {
 
         private static Bittrex bittrex = new Bittrex();
@@ -32,17 +32,22 @@ namespace CryptoDiscordBot.Crypto
             alerts.Add(alert);
             alertId++;
 
-            string botResponse = $"Alert added ID {alert.Id}: {ticker} {comparison} {price} on {exchange}";
+            string botResponse = $"Alert added {alert.ToString()}";
             return botResponse;
 
         }
 
         public static async Task<string> ListAlertsCommand()
         {
+            if(alerts.Count == 0)
+            {
+                return "No alerts set!";
+            }
+
             string botResponse = String.Empty;
             foreach(Alert alert in alerts)
             {
-                string sAlert = $"ID {alert.Id}: {alert.Ticker} {alert.Comparison} {alert.Price} on {alert.Exchange} \n";
+                string sAlert = $"{alert.ToString()} \n";
                 botResponse = String.Concat(botResponse, sAlert);
             }
 
@@ -54,10 +59,20 @@ namespace CryptoDiscordBot.Crypto
             Alert toDelete = new Alert(null, null, -1, Comparison.Above, id);
             alerts.Remove(toDelete);
 
-            return "Deleted";
+            return "Alert removed";
         }
 
-        private static async Task<bool> CheckAlertAsync(Alert alert)
+        public List<Alert> getAllAlerts()
+        {
+            return alerts;
+        }
+
+        public void removeAlert(Alert alert)
+        {
+            alerts.Remove(alert);
+        }
+
+        public async Task<bool> CheckAlertAsync(Alert alert)
         {
             if (alert.Triggered) return true;
 
@@ -66,20 +81,20 @@ namespace CryptoDiscordBot.Crypto
 
             if (alert.Comparison.Equals(Comparison.Above))
             {
-                if (alert.Price > currentPrice)
+                if (alert.Price < currentPrice)
                 {
-                    // alert set off
                     alert.Triggered = true;
-                    return alert.Triggered;
+                    alert.CurrentPrice = currentPrice;
+                    return true;
                 }
             }
             else
             {
-                if (alert.Price < currentPrice)
+                if (alert.Price > currentPrice)
                 {
-                    // alert set off
                     alert.Triggered = true;
-                    return alert.Triggered;
+                    alert.CurrentPrice = currentPrice;
+                    return true;
                 }
             }
 

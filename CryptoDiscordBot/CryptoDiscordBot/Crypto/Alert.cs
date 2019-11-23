@@ -12,6 +12,7 @@ namespace CryptoDiscordBot.Crypto
         public Comparison Comparison { get; set; }
         public bool Triggered { get; set; }
         public int Id { get; set; }
+        public double CurrentPrice { get; set; }
 
         public Alert(string ticker, string exchange, double price, Comparison comparison, int id)
         {
@@ -21,6 +22,12 @@ namespace CryptoDiscordBot.Crypto
             Comparison = comparison;
             Triggered = false;
             Id = id;
+        }
+
+        public override string ToString()
+        {
+            string sAlert = $"ID {Id}: {Ticker} {Comparison} {((decimal)(Price)).ToString()} on {Exchange}";
+            return sAlert;
         }
 
         public override bool Equals(object obj)
