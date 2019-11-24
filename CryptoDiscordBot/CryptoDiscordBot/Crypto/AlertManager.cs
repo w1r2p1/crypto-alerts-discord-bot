@@ -16,7 +16,15 @@ namespace CryptoDiscordBot.Crypto
         {
             // Determine direction of the alert
             IExchange _exchange = getExchange(exchange);
-            double currentPrice = await _exchange.getPrice(ticker);
+            double currentPrice = -1;
+
+            try
+            {
+                currentPrice = await _exchange.getPrice(ticker);
+            }catch(TickerNotFoundException tnfe)
+            {
+                return "Ticker/market not found, alert not added!";
+            }
 
             Comparison comparison;
             if(currentPrice < price)

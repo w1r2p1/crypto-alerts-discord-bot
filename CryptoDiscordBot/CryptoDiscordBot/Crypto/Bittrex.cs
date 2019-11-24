@@ -14,8 +14,6 @@ namespace CryptoDiscordBot.Crypto
 
         public async Task<double> getPrice(string ticker)
         {
-            // Check valid ticker?
-
             var price = await getTicker(ticker);
             return price;
         }
@@ -27,16 +25,11 @@ namespace CryptoDiscordBot.Crypto
 
             string response = await GetAsync(url);
 
-            try
-            {
-                var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
-                return _response.result.Last;
-
-            }
-            catch (AggregateException exc)
-            {
+            var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
+            if (_response.message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
                 throw new TickerNotFoundException();
-            }
+
+            return _response.result.Last;
 
         }
 
