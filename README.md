@@ -5,7 +5,7 @@ A Discord bot that allows users to create & manage cryptocurrency price alerts a
 
 #### Prerequisites
 
-.NET Core 2.1 or higher 
+.NET Core 2.1 
 
 #### Installing + running
 
