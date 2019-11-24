@@ -13,7 +13,7 @@ namespace CryptoDiscordBot.Crypto
         private static List<Alert> alerts = new List<Alert>();
         private static int alertId = 0;
 
-        public static async Task<string> AddAlertCommand(string exchange, string ticker, double price)
+        public static async Task<string> AddAlertCommand(string exchange, string ticker, double price, string comment)
         {
             // Determine direction of the alert
             IExchange _exchange = getExchange(exchange);
@@ -37,7 +37,7 @@ namespace CryptoDiscordBot.Crypto
                 comparison = Comparison.Below;
             }
 
-            Alert alert = new Alert(ticker, exchange, price, comparison, alertId);
+            Alert alert = new Alert(ticker, exchange, price, comparison, alertId, comment);
             alerts.Add(alert);
             alertId++;
 

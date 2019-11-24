@@ -23,7 +23,7 @@ Channel ID - The ID of the channel that the bot will send alert messages to
 ```
 #### Discord commands
 ```
-!add <exchange> <ticker> <price> - Adds an alert for the specified parameters. E.g. "!add bittrex btc-eth 0.025"
+!add <exchange> <ticker> <price> <comment> - Adds an alert for the specified parameters. E.g. "!add bittrex btc-eth 0.5 yay"
 !remove <id> - Removes the alert specified by its ID
 !list - Lists all of the current untriggered alerts that have been added
 !help - Shows all available commands
