@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net;
 using System.IO;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace CryptoDiscordBot.Crypto
 {
-    class Bittrex : IExchange
+    class Bitfinex : IExchange
     {
-        string apiEndpoint = "https://api.bittrex.com/api/v1.1/";
+        private string apiEndpoint = "https://api-pub.bitfinex.com/v2/";
 
         public async Task<double> getPriceAsync(string ticker)
         {
@@ -20,16 +19,26 @@ namespace CryptoDiscordBot.Crypto
 
         private async Task<double> getTicker(string ticker)
         {
-            string urlExtension = String.Format("public/getticker?market={0}", ticker);
+            string _ticker = ticker.ToUpper();
+            _ticker = _ticker.Replace("-", "");
+
+            string urlExtension = String.Format("ticker/t{0}", _ticker);
             string url = String.Concat(apiEndpoint, urlExtension);
 
-            string response = await GetAsync(url);
+            string response = "";
 
-            var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
-            if (_response.message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
+            try
+            {
+                response = await GetAsync(url); // [Bid,bid_size,ask,ask_size,daily_change,daily_change_perc,last_price,volume,high,low]
+            }
+            catch(WebException ex)
+            {
                 throw new TickerNotFoundException();
+            }
 
-            return _response.result.Last;
+            string lastPrice = response.Split(',')[6];
+
+            return double.Parse(lastPrice);
 
         }
 
@@ -44,25 +53,6 @@ namespace CryptoDiscordBot.Crypto
             {
                 return await reader.ReadToEndAsync();
             }
-        }
-
-    }
-
-    class GetTicker
-    {
-        public class Result
-        {
-            public double Bid { get; set; }
-            public double Ask { get; set; }
-            public double Last { get; set; }
-
-        }
-
-        public class RootObject
-        {
-            public bool success { get; set; }
-            public string message { get; set; }
-            public Result result { get; set; }
         }
     }
 }

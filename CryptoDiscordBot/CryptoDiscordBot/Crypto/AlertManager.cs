@@ -9,6 +9,7 @@ namespace CryptoDiscordBot.Crypto
     {
 
         private static Bittrex bittrex = new Bittrex();
+        private static Bitfinex bitfinex = new Bitfinex();
         private static List<Alert> alerts = new List<Alert>();
         private static int alertId = 0;
 
@@ -20,7 +21,7 @@ namespace CryptoDiscordBot.Crypto
 
             try
             {
-                currentPrice = await _exchange.getPrice(ticker);
+                currentPrice = await _exchange.getPriceAsync(ticker);
             }catch(TickerNotFoundException tnfe)
             {
                 return "Ticker/market not found, alert not added!";
@@ -85,7 +86,7 @@ namespace CryptoDiscordBot.Crypto
             if (alert.Triggered) return true;
 
             IExchange exchange = getExchange(alert.Exchange);
-            double currentPrice = await exchange.getPrice(alert.Ticker);
+            double currentPrice = await exchange.getPriceAsync(alert.Ticker);
 
             if (alert.Comparison.Equals(Comparison.Above))
             {
@@ -114,6 +115,8 @@ namespace CryptoDiscordBot.Crypto
         {
             if (exchange.Equals("bittrex", StringComparison.OrdinalIgnoreCase))
                 return bittrex;
+            if (exchange.Equals("bitfinex", StringComparison.OrdinalIgnoreCase))
+                return bitfinex;
             return null;
         }
 

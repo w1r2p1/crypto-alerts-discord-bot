@@ -7,6 +7,6 @@ namespace CryptoDiscordBot.Crypto
 {
     interface IExchange
     {
-        Task<double> getPrice(string ticker);
+        Task<double> getPriceAsync(string ticker);
     }
 }
