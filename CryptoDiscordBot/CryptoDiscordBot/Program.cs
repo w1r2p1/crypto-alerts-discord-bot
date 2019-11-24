@@ -83,7 +83,7 @@ namespace CryptoDiscordBot
                         alertManager.removeAlert(alert);
                     }
                 }
-                await Task.Delay(10);
+                await Task.Delay(1500);
             }
 
         }
