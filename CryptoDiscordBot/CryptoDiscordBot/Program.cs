@@ -20,7 +20,28 @@ namespace CryptoDiscordBot
         // Command line arguements - discordBotToken serverId channelId
         static void Main(string[] args)
         {
-            new Program().MainAsync(args).GetAwaiter().GetResult();
+            string[] _args = new string[3];
+            if(args.Length == 0)
+            {
+                Console.WriteLine("Three parameters are required - discordBotToken, serverId, channelId");
+                Console.WriteLine("Either pass these values in as command line arguements, or enter them below:");
+
+                Console.Write("Discord bot token: ");
+                _args[0] = Console.ReadLine().Trim();
+
+                Console.Write("Server ID: ");
+                _args[1] = Console.ReadLine().Trim();
+
+                Console.Write("Channel ID: ");
+                _args[2] = Console.ReadLine().Trim();
+                
+            }
+            else
+            {
+                args.CopyTo(_args, 0);
+            }
+
+            new Program().MainAsync(_args).GetAwaiter().GetResult();
         }
 
         public async Task MainAsync(string[] args)
