@@ -10,6 +10,7 @@ using Discord.Webhook;
 using Discord.Commands;
 using Discord.WebSocket;
 using CryptoDiscordBot.Discord;
+using System.Collections.Generic;
 
 namespace CryptoDiscordBot
 {
@@ -73,17 +74,29 @@ namespace CryptoDiscordBot
             while(true)
             {
                 var alerts = alertManager.getAllAlerts();
+                var checkedAlerts = new List<Alert>();
+
                 foreach(var alert in alerts.ToArray())
                 {
-                    bool triggered = await alertManager.CheckAlertAsync(alert);
-                    if(triggered)
+                    if (checkedAlerts.Contains(alert)) continue;
+
+                    var sameMarketAlerts = alertManager.getSameMarketAlerts(alert);
+                    double price = await alertManager.getAlertPriceAsync(alert);
+
+                    foreach(var _alert in sameMarketAlerts)
                     {
-                        string discordMessage = $"ALERT TRIGGERED - {alert.ToString()}. Current price: {((decimal)(alert.CurrentPrice)).ToString()}";
-                        await alertNotificationsChannel.SendMessageAsync(discordMessage);
-                        alertManager.removeAlert(alert);
+                        bool triggered = await alertManager.CheckAlertAsync(alert, price);
+                        if (triggered)
+                        {
+                            string discordMessage = $"ALERT TRIGGERED - {alert.ToString()}. Current price: {((decimal)(alert.CurrentPrice)).ToString()}";
+                            await alertNotificationsChannel.SendMessageAsync(discordMessage);
+                            alertManager.removeAlert(alert);
+                        }
+                        checkedAlerts.Add(_alert);
                     }
+                   
                 }
-                await Task.Delay(1500);
+                await Task.Delay(2000);
             }
 
         }
