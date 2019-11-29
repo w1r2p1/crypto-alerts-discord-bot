@@ -34,6 +34,4 @@ Channel ID - The ID of the channel that the bot will send alert messages to
 !help - Shows all available commands
 ```
 
-#### Packages used
-
 
