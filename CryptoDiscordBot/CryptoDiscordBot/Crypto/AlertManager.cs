@@ -7,11 +7,72 @@ namespace CryptoDiscordBot.Crypto
 {
     class AlertManager
     {
-
         private static Bittrex bittrex = new Bittrex();
         private static Bitfinex bitfinex = new Bitfinex();
         private static List<Alert> alerts = new List<Alert>();
         private static int alertId = 0;
+
+        public List<Alert> getAllAlerts()
+        {
+            return alerts;
+        }
+
+        public List<Alert> getSameMarketAlerts(Alert alert)
+        {
+            List<Alert> sameMarketAlerts = new List<Alert>();
+            foreach (var _alert in alerts.ToArray())
+            {
+                if (_alert.Exchange.Equals(alert.Exchange, StringComparison.OrdinalIgnoreCase) && _alert.Ticker.Equals(alert.Ticker, StringComparison.OrdinalIgnoreCase))
+                    sameMarketAlerts.Add(_alert);
+            }
+
+            return sameMarketAlerts;
+        }
+
+        public void removeAlert(Alert alert)
+        {
+            alerts.Remove(alert);
+        }
+
+        public async Task<double> getAlertPriceAsync(Alert alert)
+        {
+            IExchange exchange = getExchange(alert.Exchange);
+            double currentPrice = await exchange.getPriceAsync(alert.Ticker);
+
+            alert.CurrentPrice = currentPrice;
+            return currentPrice;
+        }
+
+        public async Task<bool> CheckAlertAsync(Alert alert, double price = -1)
+        {
+            if (alert.Triggered) return true;
+
+            double currentPrice;
+
+            if (price == -1)
+                currentPrice = await getAlertPriceAsync(alert);
+            else
+                currentPrice = price;
+
+            if (alert.Comparison.Equals(Comparison.Above))
+            {
+                if (alert.Price < currentPrice)
+                {
+                    alert.Triggered = true;
+                }
+            }
+            else
+            {
+                if (alert.Price > currentPrice)
+                {
+                    alert.Triggered = true;
+                }
+            }
+
+            alert.CurrentPrice = currentPrice;
+            return alert.Triggered;
+
+        }
 
         public static async Task<string> AddAlertCommand(string exchange, string ticker, double price, string comment)
         {
@@ -71,59 +132,6 @@ namespace CryptoDiscordBot.Crypto
             return "Alert removed";
         }
 
-        public List<Alert> getAllAlerts()
-        {
-            return alerts;
-        }
-
-        public List<Alert> getSameMarketAlerts(Alert alert)
-        {
-            List<Alert> sameMarketAlerts = new List<Alert>();
-            foreach(var _alert in alerts.ToArray())
-            {
-                if (_alert.Exchange.Equals(alert.Exchange, StringComparison.OrdinalIgnoreCase) && _alert.Ticker.Equals(alert.Ticker, StringComparison.OrdinalIgnoreCase))
-                    sameMarketAlerts.Add(_alert);
-            }
-
-            return sameMarketAlerts;
-        }
-
-        public void removeAlert(Alert alert)
-        {
-            alerts.Remove(alert);
-        }
-
-        public async Task<bool> CheckAlertAsync(Alert alert, double price=-1)
-        {
-            if (alert.Triggered) return true;
-
-            double currentPrice;
-
-            if (price == -1)
-                currentPrice = await getAlertPriceAsync(alert);
-            else
-                currentPrice = price;
-
-            if (alert.Comparison.Equals(Comparison.Above))
-            {
-                if (alert.Price < currentPrice)
-                {
-                    alert.Triggered = true;
-                }
-            }
-            else
-            {
-                if (alert.Price > currentPrice)
-                {
-                    alert.Triggered = true;
-                }
-            }
-
-            alert.CurrentPrice = currentPrice;
-            return alert.Triggered;
-
-        }
-
         private static IExchange getExchange(string exchange)
         {
             if (exchange.Equals("bittrex", StringComparison.OrdinalIgnoreCase))
@@ -131,15 +139,6 @@ namespace CryptoDiscordBot.Crypto
             if (exchange.Equals("bitfinex", StringComparison.OrdinalIgnoreCase))
                 return bitfinex;
             return null;
-        }
-
-        public async Task<double> getAlertPriceAsync(Alert alert)
-        {
-            IExchange exchange = getExchange(alert.Exchange);
-            double currentPrice = await exchange.getPriceAsync(alert.Ticker);
-
-            alert.CurrentPrice = currentPrice;
-            return currentPrice;
         }
 
     }

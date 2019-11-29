@@ -7,6 +7,11 @@ A Discord bot that allows users to create & manage cryptocurrency price alerts a
 
 .NET Core 2.1 
 
+#### Dependencies
+[Discord.Net](https://github.com/discord-net/Discord.Net)
+
+[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+
 #### Installing + running
 
 1. Clone or download the repository 
@@ -28,3 +33,7 @@ Channel ID - The ID of the channel that the bot will send alert messages to
 !list - Lists all of the current untriggered alerts that have been added
 !help - Shows all available commands
 ```
+
+#### Packages used
+
+
