@@ -23,13 +23,21 @@ namespace CryptoDiscordBot.Crypto
             string urlExtension = String.Format("public/getticker?market={0}", ticker);
             string url = String.Concat(apiEndpoint, urlExtension);
 
-            string response = await GetAsync(url);
+            try
+            {
+                string response = await GetAsync(url);
 
-            var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
-            if (_response.message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
-                throw new Exception();
+                var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
+                if (_response.message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
+                    throw new Exception();
 
-            return _response.result.Last;
+                return _response.result.Last;
+            }
+            catch(Exception ex)
+            {
+                string msg = String.Format("Ticker {0} not found. Make sure the ticker is a valid {1} ticker, e.g. \"{2}\"", ticker, "Bittrex", "BTC-ETH");
+                throw new TickerNotFoundException(msg);
+            }
 
         }
 

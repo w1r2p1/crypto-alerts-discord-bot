@@ -12,13 +12,22 @@ namespace CryptoDiscordBot.Crypto
         public async Task<double> getPriceAsync(string ticker)
         {
             WebClient wc = new WebClient();
-            string url = String.Format("https://api.binance.com/api/v3/avgPrice?symbol={0}", ticker);
+            string url = String.Format("https://api.binance.com/api/v3/avgPrice?symbol={0}", ticker.ToUpper());
 
-            string response = await wc.DownloadStringTaskAsync(new Uri(url));
-            dynamic json = JsonConvert.DeserializeObject(response);
+            try
+            {
+                string response = await wc.DownloadStringTaskAsync(new Uri(url));
+                dynamic json = JsonConvert.DeserializeObject(response);
+                double price = json.price;
 
-            double price = json.price;
-            return price;
+                return price;
+            }
+            catch(Exception e)
+            {
+                string msg = String.Format("Ticker {0} not found. Make sure the ticker is a valid {1} ticker, e.g. \"{2}\"", ticker, "Binance", "ETHBTC");
+                throw new TickerNotFoundException(msg);
+            }
+            
         }
     }
 }

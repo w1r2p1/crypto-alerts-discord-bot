@@ -91,9 +91,9 @@ namespace CryptoDiscordBot.Crypto
             try
             {
                 currentPrice = await _exchange.getPriceAsync(ticker);
-            }catch(Exception exc)
+            }catch(TickerNotFoundException exc)
             {
-                return "Ticker/market not found, alert not added!";
+                return exc.Message;
             }
 
             Comparison comparison;

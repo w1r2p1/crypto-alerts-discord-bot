@@ -25,20 +25,18 @@ namespace CryptoDiscordBot.Crypto
             string urlExtension = String.Format("ticker/t{0}", _ticker);
             string url = String.Concat(apiEndpoint, urlExtension);
 
-            string response = "";
-
             try
             {
-                response = await GetAsync(url); // [Bid,bid_size,ask,ask_size,daily_change,daily_change_perc,last_price,volume,high,low]
+                string response = await GetAsync(url); // [Bid,bid_size,ask,ask_size,daily_change,daily_change_perc,last_price,volume,high,low]
+
+                string lastPrice = response.Split(',')[6];
+                return double.Parse(lastPrice);
             }
-            catch(WebException ex)
+            catch(Exception ex)
             {
-                throw ex;
+                string msg = String.Format("Ticker {0} not found. Make sure the ticker is a valid {1} ticker, e.g. \"{2}\"", ticker, "Bitfinex", "ETHBTC");
+                throw new TickerNotFoundException(msg);
             }
-
-            string lastPrice = response.Split(',')[6];
-
-            return double.Parse(lastPrice);
 
         }
 
