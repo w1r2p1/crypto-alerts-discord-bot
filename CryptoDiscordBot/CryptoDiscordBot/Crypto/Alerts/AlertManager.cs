@@ -140,7 +140,7 @@ namespace CryptoDiscordBot.Crypto
             return "Alert removed";
         }
 
-        private static IExchange getExchange(string exchange)
+        public static IExchange getExchange(string exchange)
         {
             if (exchange.Equals("bittrex", StringComparison.OrdinalIgnoreCase))
                 return bittrex;
