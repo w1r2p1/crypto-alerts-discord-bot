@@ -98,7 +98,7 @@ namespace CryptoDiscordBot
                 }
                 await Task.Delay(2000);
             }
-
+            
         }
 
         private Task Log(LogMessage msg)
