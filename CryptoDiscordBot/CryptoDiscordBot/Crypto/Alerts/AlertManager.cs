@@ -9,6 +9,7 @@ namespace CryptoDiscordBot.Crypto
     {
         private static Bittrex bittrex = new Bittrex();
         private static Bitfinex bitfinex = new Bitfinex();
+        private static Bitmex bitmex = new Bitmex();
         private static List<Alert> alerts = new List<Alert>();
         private static int alertId = 0;
 
@@ -138,6 +139,8 @@ namespace CryptoDiscordBot.Crypto
                 return bittrex;
             if (exchange.Equals("bitfinex", StringComparison.OrdinalIgnoreCase))
                 return bitfinex;
+            if (exchange.Equals("bitmex", StringComparison.OrdinalIgnoreCase))
+                return bitmex;
             return null;
         }
 
