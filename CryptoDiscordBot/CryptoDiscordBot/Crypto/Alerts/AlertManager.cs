@@ -84,6 +84,9 @@ namespace CryptoDiscordBot.Crypto
             IExchange _exchange = getExchange(exchange);
             double currentPrice = -1;
 
+            if (_exchange == null)
+                return "Invalid exchange, alert not added";
+
             try
             {
                 currentPrice = await _exchange.getPriceAsync(ticker);
