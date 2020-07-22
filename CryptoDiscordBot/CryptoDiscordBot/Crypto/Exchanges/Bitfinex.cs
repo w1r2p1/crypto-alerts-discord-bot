@@ -33,7 +33,7 @@ namespace CryptoDiscordBot.Crypto
             }
             catch(WebException ex)
             {
-                throw new TickerNotFoundException();
+                throw ex;
             }
 
             string lastPrice = response.Split(',')[6];

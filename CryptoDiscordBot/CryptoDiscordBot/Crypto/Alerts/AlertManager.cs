@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -90,7 +91,7 @@ namespace CryptoDiscordBot.Crypto
             try
             {
                 currentPrice = await _exchange.getPriceAsync(ticker);
-            }catch(TickerNotFoundException tnfe)
+            }catch(Exception exc)
             {
                 return "Ticker/market not found, alert not added!";
             }

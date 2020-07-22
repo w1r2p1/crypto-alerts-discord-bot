@@ -27,7 +27,7 @@ namespace CryptoDiscordBot.Crypto
 
             var _response = JsonConvert.DeserializeObject<GetTicker.RootObject>(response);
             if (_response.message.Contains("invalid", StringComparison.OrdinalIgnoreCase))
-                throw new TickerNotFoundException();
+                throw new Exception();
 
             return _response.result.Last;
 
