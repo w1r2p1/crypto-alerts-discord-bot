@@ -38,7 +38,7 @@ namespace CryptoDiscordBot.Database
             connection.Open();
         }
 
-        public void insertAlert(Alert alert)
+        public void InsertAlert(Alert alert)
         {
             List<string> fields = new List<string>() { "id", "ticker", "exchange", "price", "comparison", "userComment" };
             List<string> values = new List<string>() { alert.Id.ToString(), alert.Ticker, alert.Exchange, alert.Price.ToString(), alert.Comparison.ToString(), alert.Comment };
@@ -48,7 +48,15 @@ namespace CryptoDiscordBot.Database
             command.ExecuteNonQuery();
         }
 
-        public List<Alert> getAllAlerts()
+        public void DeleteAlert(Alert alert)
+        {
+            string sql = generateDeleteStatement(_table, "id", alert.Id.ToString());
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+        }
+
+        public List<Alert> GetAllAlerts()
         {
             List<Alert> alerts = new List<Alert>();
 
@@ -107,6 +115,12 @@ namespace CryptoDiscordBot.Database
             statement = statement.Remove(statement.Length - 2);
             statement += ")";
 
+            return statement;
+        }
+
+        private string generateDeleteStatement(string table, string whereField, string whereValue)
+        {
+            string statement = String.Format("DELETE FROM {0} WHERE {1}='{2}'", table, whereField, whereValue);
             return statement;
         }
 

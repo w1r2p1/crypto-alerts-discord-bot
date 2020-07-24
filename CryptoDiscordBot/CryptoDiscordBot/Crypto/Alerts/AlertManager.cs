@@ -29,7 +29,7 @@ namespace CryptoDiscordBot.Crypto
         {
             database = new Database.MySql(dbServer, dbPort, dbName, dbTable, dbUser, dbPassword);
             database.Connect();
-            alerts = database.getAllAlerts();
+            alerts = database.GetAllAlerts();
             alertId = alerts.Max(a => a.Id) + 1;
         }
 
@@ -53,6 +53,7 @@ namespace CryptoDiscordBot.Crypto
         public void removeAlert(Alert alert)
         {
             alerts.Remove(alert);
+            database.DeleteAlert(alert);
         }
 
         public async Task<double> getAlertPriceAsync(Alert alert)
@@ -126,7 +127,7 @@ namespace CryptoDiscordBot.Crypto
             alerts.Add(alert);
 
             if(database != null)
-                database.insertAlert(alert);
+                database.InsertAlert(alert);
 
             alertId++;
 
@@ -156,7 +157,8 @@ namespace CryptoDiscordBot.Crypto
         {
             Alert toDelete = new Alert(null, null, -1, Comparison.Above, id);
             alerts.Remove(toDelete);
-            
+            database.DeleteAlert(toDelete);
+
             return "Alert removed";
         }
 

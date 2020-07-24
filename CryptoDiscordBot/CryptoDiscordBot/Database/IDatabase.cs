@@ -7,7 +7,8 @@ namespace CryptoDiscordBot.Database
 {
     interface IDatabase
     {
-        void insertAlert(Alert alert);
-        List<Alert> getAllAlerts();
+        void InsertAlert(Alert alert);
+        void DeleteAlert(Alert alert);
+        List<Alert> GetAllAlerts();
     }
 }
