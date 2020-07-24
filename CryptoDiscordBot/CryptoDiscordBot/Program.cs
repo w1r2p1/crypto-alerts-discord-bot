@@ -18,7 +18,6 @@ namespace CryptoDiscordBot
     {
         SocketTextChannel alertNotificationsChannel;
 
-        // Command line arguements - discordBotToken serverId channelId
         static void Main(string[] args)
         {
             string[] _args = new string[1];
@@ -62,7 +61,9 @@ namespace CryptoDiscordBot
             Console.WriteLine("Discord alerts channel set.");
 
             // Check all alerts constantly to see if they have been triggered
-            AlertManager alertManager = new AlertManager();
+            AlertManager alertManager = new AlertManager(config.DatabaseServerUrl, config.DatabasePort, config.DatabaseName, config.DatabaseTable, config.DatabaseUser, config.DatabasePassword);
+            Console.WriteLine("Database connection made and all alerts grabbed.");
+
             while(true)
             {
                 var alerts = alertManager.getAllAlerts();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,21 @@ namespace CryptoDiscordBot.Crypto
 
         private static List<Alert> alerts = new List<Alert>();
         private static int alertId = 0;
+
+        private static Database.MySql database;
+
+        public AlertManager()
+        {
+            database = null;
+        }
+
+        public AlertManager(string dbServer, int dbPort, string dbName, string dbTable, string dbUser, string dbPassword)
+        {
+            database = new Database.MySql(dbServer, dbPort, dbName, dbTable, dbUser, dbPassword);
+            database.Connect();
+            alerts = database.getAllAlerts();
+            alertId = alerts.Max(a => a.Id) + 1;
+        }
 
         public List<Alert> getAllAlerts()
         {
@@ -108,6 +124,10 @@ namespace CryptoDiscordBot.Crypto
 
             Alert alert = new Alert(ticker, exchange, price, comparison, alertId, comment);
             alerts.Add(alert);
+
+            if(database != null)
+                database.insertAlert(alert);
+
             alertId++;
 
             string botResponse = $"Alert added {alert.ToString()}";

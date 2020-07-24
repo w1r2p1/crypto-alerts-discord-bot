@@ -30,7 +30,7 @@ namespace CryptoDiscordBot.Database
             _password = password;
 
             connectionString = String.Format("server={0};user={1};database={2};port={3};password={4}", server, username, database, port, password);
-            connection = null;
+            connection = new MySqlConnection(connectionString);
         }
 
         public void Connect()
