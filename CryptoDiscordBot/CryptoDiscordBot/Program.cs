@@ -21,21 +21,11 @@ namespace CryptoDiscordBot
         // Command line arguements - discordBotToken serverId channelId
         static void Main(string[] args)
         {
-            string[] _args = new string[3];
+            string[] _args = new string[1];
             if(args.Length == 0)
             {
-                Console.WriteLine("Three parameters are required - discordBotToken, serverId, channelId");
-                Console.WriteLine("Either pass these values in as command line arguements, or enter them below:");
-
-                Console.Write("Discord bot token: ");
+                Console.WriteLine("Please enter the path to the config file:");
                 _args[0] = Console.ReadLine().Trim();
-
-                Console.Write("Server ID: ");
-                _args[1] = Console.ReadLine().Trim();
-
-                Console.Write("Channel ID: ");
-                _args[2] = Console.ReadLine().Trim();
-                
             }
             else
             {
@@ -48,9 +38,11 @@ namespace CryptoDiscordBot
         public async Task MainAsync(string[] args)
         {
             // Parse command line arguements
-            string discordToken = args[0];
-            ulong serverId = ulong.Parse(args[1]);
-            ulong channelId = ulong.Parse(args[2]);
+            Config config = Config.readConfigFile(args[0]);
+
+            string discordToken = config.DiscordBotToken;
+            ulong serverId = ulong.Parse(config.DiscordServerId);
+            ulong channelId = ulong.Parse(config.DiscordChannelId);
 
             // Initialize discord client
             DiscordSocketClient client = new DiscordSocketClient();
