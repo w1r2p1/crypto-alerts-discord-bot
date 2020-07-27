@@ -60,11 +60,20 @@ namespace CryptoDiscordBot
             alertNotificationsChannel = client.GetGuild(serverId).GetTextChannel(channelId);
             Console.WriteLine("Discord alerts channel set.");
 
-            // Check all alerts constantly to see if they have been triggered
-            AlertManager alertManager = new AlertManager(config.DatabaseServerUrl, config.DatabasePort, config.DatabaseName, config.DatabaseTable, config.DatabaseUser, config.DatabasePassword);
-            Console.WriteLine("Database connection made and all alerts grabbed.");
+            AlertManager alertManager;
+            if (config.DatabaseCredentialsSet)
+            {
+                alertManager = new AlertManager(config.DatabaseServerUrl, config.DatabasePort, config.DatabaseName, config.DatabaseTable, config.DatabaseUser, config.DatabasePassword);
+                Console.WriteLine("Database connection made and all stored alerts grabbed.");
+            }
+            else
+            {
+                alertManager = new AlertManager();
+                Console.WriteLine("No database connection, alerts will be stored in memory only.");
+            }
 
-            while(true)
+            // Check all alerts constantly to see if they have been triggered
+            while (true)
             {
                 var alerts = alertManager.getAllAlerts();
                 var checkedAlerts = new List<Alert>();

@@ -53,7 +53,9 @@ namespace CryptoDiscordBot.Crypto
         public void removeAlert(Alert alert)
         {
             alerts.Remove(alert);
-            database.DeleteAlert(alert);
+
+            if(database != null)
+                database.DeleteAlert(alert);
         }
 
         public async Task<double> getAlertPriceAsync(Alert alert)
@@ -157,7 +159,9 @@ namespace CryptoDiscordBot.Crypto
         {
             Alert toDelete = new Alert(null, null, -1, Comparison.Above, id);
             alerts.Remove(toDelete);
-            database.DeleteAlert(toDelete);
+
+            if(database != null)
+                database.DeleteAlert(toDelete);
 
             return "Alert removed";
         }
