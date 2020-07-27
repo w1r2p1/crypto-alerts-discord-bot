@@ -3,7 +3,7 @@
 
 A Discord bot that allows users to create & manage cryptocurrency price alerts and be notified when an alert is set off. Alerts can be stored in and retrieved from a MySQL database. The bot also allows you to query prices and supports multiple exchanges.
 
-#### Installing + running
+### Installing + running
 
 To clone, build and run this project:
 ```
@@ -13,7 +13,8 @@ dotnet build
 dotnet run <config file path>
 ```
 
-#### Config file
+
+### Config file
 To run the bot, there are multiple parameters that must be specified. The path to the config text file should be supplied as a command line argument, or if no argument is passed, the program will prompt the user to enter the path to the file at runtime. 
 
 The config file specifies the following parameters:
@@ -46,7 +47,7 @@ The schema of the database table where alerts are stored from should be as follo
 ![alt tag](database_schema.png)
 
 
-#### Discord commands
+### Discord commands
 ```
 !add <exchange> <ticker> <price> <comment> - Adds an alert for the specified parameters. E.g. "!add bittrex btc-eth 0.5 yay"
 !remove <id> - Removes the alert specified by its ID
