@@ -1,0 +1,9 @@
+discordbottoken=NjQVDDE3OTH3ZTZyMzB0MYAx.XqK57v.Zqm3zgM4yBPfK3tYoX-LP3w5ZQV
+discordserverid=729135335169167162
+discordchannelid=727262153752892704
+databaseserverurl=hosted-database-url.com
+databaseport=3306
+databasename=bot
+databasetable=alerts
+databaseuser=admin
+databasepassword=password123
